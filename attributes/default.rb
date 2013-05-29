@@ -18,6 +18,7 @@ default['zabbix-server-misc']['packages']['rhel'] = %w{
   libxml2-devel
   libxslt
   libxslt-devel
+  ntp
 }
 default['zabbix-server-misc']['packages']['ubuntu'] = %w{ 
   mlocate
@@ -29,6 +30,7 @@ default['zabbix-server-misc']['packages']['ubuntu'] = %w{
   zsh
   screen
   ruby1.9.3
+  ntp
 }
 default['zabbix-server-misc']['packages']['gem'] = %w{
   nokogiri
@@ -36,3 +38,11 @@ default['zabbix-server-misc']['packages']['gem'] = %w{
   rbvmomi
   thinreports
 }
+default['ntp']['servers'] = %w{ntp.nict.jp}
+case platform
+  when "redhat", "centos", "fedora"
+    default['ntp']['service'] = "ntpd"
+  when "ubuntu"
+    default['ntp']['service'] = "ntp"
+end
+

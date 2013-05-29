@@ -12,10 +12,6 @@ if platform?("redhat", "centos", "fedora")
     source "http://dl.fedoraproject.org/pub/epel/#{node[:platform_version].to_i}/#{node[:kernel][:machine]}/epel-release-#{node[:platform_version].to_i}-8.noarch.rpm"
   end
 
-  template "/etc/yum.repos.d/CentOS-Base.repo" do
-    source "CentOS-Base.repo.erb"
-  end
-
   package "epel-release" do
     action :install
     source "#{Chef::Config[:file_cache_path]}/epel-release.noarch.rpm"
@@ -71,5 +67,29 @@ node['zabbix-server-misc']['packages']['gem'].each do |pkg|
     action :install
     options("--no-ri --no-rdoc")
   end
+end
+
+template "/etc/zabbix/rbvmoni-zabbix.rb" do
+  source "rbvmoni-zabbix.rb.erb"
+  mode "00755"
+  owner "root"
+  group "root"
+end
+
+template "/etc/zabbix/zabbix_agentd.d/userparameter_vsphere-vm.conf" do
+  source "/userparameter_vsphere-vm.conf.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+end
+
+template "/etc/ntp.conf" do
+  source "ntp.conf.erb"
+#  notifies :restart, resources(service => node['ntp']['service'])
+  notifies :restart, "service[#{node['ntp']['service']}]"
+end
+
+service node['ntp']['service'] do
+  action [:enable, :start]
 end
 
