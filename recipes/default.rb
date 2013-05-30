@@ -34,6 +34,20 @@ if platform?("redhat", "centos", "fedora")
     provider Chef::Provider::Package::Rpm
   end
 
+  template "/usr/lib64/ruby/gems/1.9.1/gems/zbxapi-0.2.415/zbxapi.rb" do
+    source "zbxapi.rb.erb"
+    mode "00644"
+    owner "root"
+    group "root"
+  end
+
+  template "/usr/lib64/ruby/gems/1.9.1/gems/zbxapi-0.2.415/api_classes/dsl_host.rb" do
+    source "dsl_host.rb.erb"
+    mode "00644"
+    owner "root"
+    group "root"
+  end
+
   service "udev-post" do
     action [ :disable, :stop ]
   end
@@ -77,7 +91,7 @@ template "/etc/zabbix/rbvmoni-zabbix.rb" do
 end
 
 template "/etc/zabbix/zabbix_agentd.d/userparameter_vsphere-vm.conf" do
-  source "/userparameter_vsphere-vm.conf.erb"
+  source "userparameter_vsphere-vm.conf.erb"
   mode "00644"
   owner "root"
   group "root"
@@ -85,7 +99,6 @@ end
 
 template "/etc/ntp.conf" do
   source "ntp.conf.erb"
-#  notifies :restart, resources(service => node['ntp']['service'])
   notifies :restart, "service[#{node['ntp']['service']}]"
 end
 
