@@ -6,9 +6,16 @@ require 'logger'
 require 'rbvmomi'
 require 'fileutils'
 
-ESX_GROUP = "VM ESXi"
-DS_GROUP = "VM Datastore"
-VM_GROUP = "VM VirtualMachine"
+print_usage if ARGV.size != 5
+vcHost = ARGV[0]
+vcUser = ARGV[1]
+vcPass = ARGV[2]
+dsName = ARGV[3]
+$zbxUrl = ARGV[4]
+
+ESX_GROUP = "#{dsName} ESXi"
+DS_GROUP = "#{dsName} Datastore"
+VM_GROUP = "#{dsName} VirtualMachine"
 ESX_TEMPLATE = "Template-vSphere-ESXi"
 DS_TEMPLATE = "Template-vSphere-Datastore"
 VM_TEMPLATE = "Template-vSphere-VM"
@@ -287,11 +294,8 @@ def stats_file_check(zbx_host, fileName)
 end
 
 
-print_usage if ARGV.size != 4
-vcHost = ARGV[0]
-vcUser = ARGV[1]
-vcPass = ARGV[2]
-$zbxUrl = ARGV[3]
+
+
 
 $filePath = FILEPATH + "/stats/"
 FileUtils.mkdir_p($filePath) unless File.exists?($filePath)
