@@ -106,3 +106,102 @@ service node['ntp']['service'] do
   action [:enable, :start]
 end
 
+
+service "monit" do
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable, :start ]
+end
+
+template "/etc/monit.conf" do
+  source "monit.conf.erb"
+  mode "00600"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/httpd" do
+  source "httpd.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/httpd" do
+  source "httpd.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/httpd" do
+  source "httpd.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/logging" do
+  source "logging.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/mail" do
+  source "mail.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/postgres" do
+  source "postgres.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/snmptrapd" do
+  source "snmptrapd.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/zabbix-server" do
+  source "zabbix-server.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+template "/etc/monit.d/zabbix-agent" do
+  source "zabbix-agent.erb"
+  mode "00644"
+  owner "root"
+  group "root"
+  notifies :restart, "service[monit]"
+end
+
+
+template "/etc/zabbix/zabbix_agentd.conf" do
+  source "zabbix_agentd.conf.erb"
+  action :create
+  mode 0644
+  notifies :restart, "service[zabbix-agent]"
+end
+
+service "zabbix-agent" do
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable, :start ]
+end
+

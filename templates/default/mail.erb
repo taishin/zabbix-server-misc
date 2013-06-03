@@ -1,0 +1,14 @@
+set mailserver <%= node['zabbix-server-misc']['monit']['mailserver'] %>
+set mail-format {
+from: <%= node['zabbix-server-misc']['monit']['fromaddress'] %>
+subject: $HOST : $SERVICE - $EVENT
+message: Monit
+ACTION  : $ACTION
+SERVICE : $SERVICE
+at $DATE on $HOST.
+DESCRIPTION : $DESCRIPTION
+}
+
+<% node['zabbix-server-misc']['monit']['toaddress'].each do |to| %>
+set alert <%= "#{to}" %>
+<% end %>

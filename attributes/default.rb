@@ -19,6 +19,7 @@ default['zabbix-server-misc']['packages']['rhel'] = %w{
   libxslt
   libxslt-devel
   ntp
+  monit
 }
 default['zabbix-server-misc']['packages']['ubuntu'] = %w{ 
   mlocate
@@ -31,6 +32,7 @@ default['zabbix-server-misc']['packages']['ubuntu'] = %w{
   screen
   ruby1.9.3
   ntp
+  monit
 }
 default['zabbix-server-misc']['packages']['gem'] = %w{
   nokogiri
@@ -46,3 +48,9 @@ case platform
     default['ntp']['service'] = "ntp"
 end
 
+default['zabbix-server-misc']['monit']['mailserver'] = "localhost"
+default['zabbix-server-misc']['monit']['fromaddress'] = "from@example.com"
+default['zabbix-server-misc']['monit']['toaddress'] = %w{
+  "test1@example.com"
+  "test2@example.com"
+}
