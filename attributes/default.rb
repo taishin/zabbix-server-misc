@@ -54,3 +54,4 @@ default['zabbix-server-misc']['monit']['toaddress'] = %w{
   "test1@example.com"
   "test2@example.com"
 }
+default['zabbix-server-misc']['zabbix-agent']['hostname'] = "localhost"
