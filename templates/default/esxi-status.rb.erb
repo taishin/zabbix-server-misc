@@ -1,0 +1,74 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+require 'rbvmomi'
+
+# print_usage if ARGV.size != 5
+vcHost = ARGV[0]
+vcUser = ARGV[1]
+vcPass = ARGV[2]
+vcStatus = ARGV[3]
+
+class VSphere < RbVmomi::VIM
+  def initialize(host, user, pass)
+    @host = host
+    @user = user
+    @password = pass
+
+    begin
+      @vim = RbVmomi::VIM.connect :host => @host, :user => @user, :password => @password, :insecure => true
+    rescue => exc
+      p exc
+      exit
+    end
+
+    begin
+      @dc = @vim.serviceInstance.find_datacenter
+    rescue => exc
+      p exc
+      exit
+    end
+  end
+
+
+  def get_host_status(status)
+
+    new_list = Array.new
+
+    @dc.hostFolder.childEntity.each do |vmhost|
+      vmhost.host.grep(RbVmomi::VIM::HostSystem).each do |stat|
+        case status
+        when "Hostname" then
+          puts stat.name
+        when "Product" then
+          puts stat.summary.config.product.fullName
+        when "HardwareModel" then
+          puts stat.summary.hardware.model
+        when "CPUModel" then
+          puts stat.summary.hardware.cpuModel
+        when "CPUMHz" then
+          puts stat.summary.hardware.cpuMhz
+        when "CPUCore" then
+          puts stat.summary.hardware.numCpuCores
+        when "CPUUsage" then
+          puts stat.summary.quickStats.overallCpuUsage
+        when "TotalMemorySize" then
+          puts stat.summary.hardware.memorySize/1024/1024
+        when "MemoryUsage" then
+          puts stat.summary.quickStats.overallMemoryUsage
+        when "PowerState" then
+          puts stat.summary.runtime.powerState
+        when "MaintenanceMode" then
+          puts stat.summary.runtime.inMaintenanceMode
+        when "Uptime" then
+          puts stat.summary.quickStats.uptime
+        end
+      end
+    end
+  end
+end
+
+ds = VSphere.new(vcHost, vcUser, vcPass)
+
+ds.get_host_status(vcStatus)
+

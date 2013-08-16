@@ -97,14 +97,21 @@ template "/etc/zabbix/zabbix_agentd.d/userparameter_vsphere-vm.conf" do
   group "root"
 end
 
-template "/etc/ntp.conf" do
-  source "ntp.conf.erb"
-  notifies :restart, "service[#{node['ntp']['service']}]"
+template "/usr/lib/zabbix/externalscripts/esxi-status.rb" do
+  source "esxi-status.rb.erb"
+  mode "00755"
+  owner "root"
+  group "root"
 end
 
-service node['ntp']['service'] do
-  action [:enable, :start]
-end
+# template "/etc/ntp.conf" do
+#   source "ntp.conf.erb"
+#   notifies :restart, "service[#{node['ntp']['service']}]"
+# end
+
+# service node['ntp']['service'] do
+#   action [:enable, :start]
+# end
 
 
 service "monit" do
@@ -193,15 +200,15 @@ template "/etc/monit.d/zabbix-agent" do
 end
 
 
-template "/etc/zabbix/zabbix_agentd.conf" do
-  source "zabbix_agentd.conf.erb"
-  action :create
-  mode 0644
-  notifies :restart, "service[zabbix-agent]"
-end
+# template "/etc/zabbix/zabbix_agentd.conf" do
+#   source "zabbix_agentd.conf.erb"
+#   action :create
+#   mode 0644
+#   notifies :restart, "service[zabbix-agent]"
+# end
 
-service "zabbix-agent" do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
-end
+# service "zabbix-agent" do
+#   supports :status => true, :restart => true, :reload => true
+#   action [ :enable, :start ]
+# end
 

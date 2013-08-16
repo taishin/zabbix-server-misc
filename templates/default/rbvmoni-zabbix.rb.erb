@@ -175,7 +175,7 @@ class VSphere < RbVmomi::VIM
     when "host"
       @dc.hostFolder.childEntity.each do |vmhost|
         vmhost.host.grep(RbVmomi::VIM::HostSystem).each do |stat|
-          newname = stat.name.gsub(/:/,"-")
+          newname = stat.name.gsub(/:|\(|\)/,"-")
           stat_fileName = "h_#{newname}"
           new_list << newname unless File.exist?($filePath + stat_fileName)
           statData = {
@@ -204,7 +204,7 @@ class VSphere < RbVmomi::VIM
 
     when "ds"
       @dc.datastore.grep(RbVmomi::VIM::Datastore).each do |stat|
-        newname = stat.name.gsub(/:/,"-")
+        newname = stat.name.gsub(/:|\(|\)/,"-")
         stat_fileName = "d_#{newname}"
         new_list << newname unless File.exist?($filePath + stat_fileName)
         vm_list =[]
@@ -226,7 +226,7 @@ class VSphere < RbVmomi::VIM
 
     when "vm"
       @dc.vmFolder.childEntity.grep(RbVmomi::VIM::VirtualMachine).each do |stat|
-        newname = stat.name.gsub(/:/,"-")
+        newname = stat.name.gsub(/:|\(|\)/,"-")
         stat_fileName = "v_#{newname}"
         new_list << newname unless File.exist?($filePath + stat_fileName)
         statData = {

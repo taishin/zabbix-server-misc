@@ -20,6 +20,8 @@ default['zabbix-server-misc']['packages']['rhel'] = %w{
   libxslt-devel
   ntp
   monit
+  wget
+  zip
 }
 default['zabbix-server-misc']['packages']['ubuntu'] = %w{ 
   mlocate
@@ -39,6 +41,7 @@ default['zabbix-server-misc']['packages']['gem'] = %w{
   zbxapi
   rbvmomi
   thinreports
+  zipruby
 }
 default['ntp']['servers'] = %w{ntp.nict.jp}
 case platform
@@ -51,7 +54,7 @@ end
 default['zabbix-server-misc']['monit']['mailserver'] = "localhost"
 default['zabbix-server-misc']['monit']['fromaddress'] = "from@example.com"
 default['zabbix-server-misc']['monit']['toaddress'] = %w{
-  "test1@example.com"
-  "test2@example.com"
+  test1@example.com
+  test2@example.com
 }
 default['zabbix-server-misc']['zabbix-agent']['hostname'] = "localhost"
