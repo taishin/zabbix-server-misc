@@ -34,6 +34,13 @@ if platform?("redhat", "centos", "fedora")
     provider Chef::Provider::Package::Rpm
   end
 
+  node['zabbix-server-misc']['packages']['gem'].each do |pkg|
+    gem_package "#{pkg}" do
+      action :install
+      options("--no-ri --no-rdoc")
+    end
+  end
+
   template "/usr/lib64/ruby/gems/1.9.1/gems/zbxapi-0.2.415/zbxapi.rb" do
     source "zbxapi.rb.erb"
     mode "00644"
@@ -74,14 +81,16 @@ if platform?("ubuntu")
       action :install
     end
   end
-end
 
-node['zabbix-server-misc']['packages']['gem'].each do |pkg|
-  gem_package "#{pkg}" do
-    action :install
-    options("--no-ri --no-rdoc")
+  node['zabbix-server-misc']['packages']['gem'].each do |pkg|
+    gem_package "#{pkg}" do
+      action :install
+      options("--no-ri --no-rdoc")
+    end
   end
 end
+
+
 
 template "/etc/zabbix/rbvmoni-zabbix.rb" do
   source "rbvmoni-zabbix.rb.erb"
